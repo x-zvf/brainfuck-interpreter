@@ -21,7 +21,6 @@ size_t *stack;
 unsigned int stackoffs = 0;
 
 uint8_t get_cell() {
-    fflush(stdout);
     return cmem->cells[cmem->offset];
 }
 
@@ -44,7 +43,6 @@ struct mem *alloc_mem() {
     new->next = NULL;
     new->prev = NULL;
     memset(new->cells, 0, CELLS_PER_MEM);
-    fflush(stderr);
     return new;
 }
 
@@ -82,7 +80,6 @@ int main(int argc, char **argv){
         return 1;
     }
     FILE *program;
-    fflush(stderr);
     if((program = fopen(argv[1],"r")) == NULL) {
         fprintf(stderr,"Failed to open file %s: %s\n", argv[1], strerror(errno));
         return 1;
@@ -107,7 +104,8 @@ int main(int argc, char **argv){
                 }
 
                 if(stackoffs >= STACK_SIZE) {
-                    exit(1);
+                    fprintf(stderr, "Stack full");
+                    return 1;
                 }
                 break;
             case ']':
